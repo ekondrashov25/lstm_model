@@ -6,28 +6,33 @@ from model import LSTMModel
 from utils import save_checkpoint
 
 
+# hyperparameters of the model
+# hidden_size=250
+# learning_rate=1e-1
+# seq_length=25
+
 filename = "datasets/literature/shakespear.txt"
 data = open(filename, 'r').read()
 chars = sorted(list(set(data)))
 char_to_idx = {c: i for i, c in enumerate(chars)}
 idx_to_char = {i: c for i, c in enumerate(chars)}
 
-model = LSTMModel(input_size=len(chars), hidden_size=250, output_size=len(chars), learning_rate=1e3)
+hidden_size = 250
+learning_rate = 1e-1
 
-# hyperparameters of the model
-# hidden_size=250
-# learning_rate=1e-1
-# seq_length=25
+model = LSTMModel(input_size=len(chars), hidden_size=hidden_size, output_size=len(chars), learning_rate=learning_rate)
 
 n, p = 0, 0
 h_prev = np.zeros((model.hidden_size, 1))
-
 c_prev = np.zeros((model.hidden_size, 1))
 smooth_loss = -np.log(1.0 / len(chars)) * model.seq_length
+
 sample_size = 500
-epochs = 10
+epochs = 15
 iterations = len(data) // model.seq_length * epochs
 
+print(f"epoch in training: {epochs}, iterations to complete: {iterations}")
+print(f"model parameters: {sample_size=}, input_size={len(chars)}, output_size={len(chars)}, {hidden_size=}, {learning_rate=}, {model.seq_length=}")
 
 loss_history = []
 loss_per_char_history = []
@@ -52,7 +57,7 @@ for _ in range(iterations):
     sample_size = 500
 
     if n % 100 == 0:
-        save_checkpoint(model, 'checkpoints/model.npz')
+        # save_checkpoint(model, 'checkpoints/model.npz')
         grad_norm = np.sqrt(sum(np.sum(g**2) for g in grads.values()))
         print(f"iter {n}, loss: {smooth_loss:.4f}, grad norm: {grad_norm:.4f}, loss per char: {loss / model.seq_length:.4f}")
 
@@ -60,8 +65,8 @@ for _ in range(iterations):
         loss_per_char_history.append(loss / model.seq_length)
         iteration_history.append(n)
 
-        if smooth_loss < 35:
-            sample_ix = model.sample(inputs[0], sample_size, h_prev, c_prev)
+        if smooth_loss < 20:
+            sample_ix = model.sample(inputs[0], sample_size, h_prev, c_prev, temperature=0.8)
             sample_text = ''.join(idx_to_char[ix] for ix in sample_ix)
             print(f"\n{sample_text}\n")
 
