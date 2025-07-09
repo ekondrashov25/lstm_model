@@ -1,9 +1,9 @@
 import numpy as np
 
-from model import LSTMModel
 from utils import load_checkpoint
+from models.lstm_model import LSTMModel
 
-hidden_size = 250
+hidden_size = 250 # should match hidden_size which was set during traninig process
 checkpoint_file = "checkpoints/model.npz"
 
 filename = "datasets/literature/shakespear.txt"
