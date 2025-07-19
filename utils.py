@@ -12,14 +12,12 @@ def load_checkpoint(model, filename):
     checkpoint = np.load(filename)
     params = model.get_params()
 
-    # Load parameters
     for k in params:
         if k in checkpoint:
             params[k][...] = checkpoint[k]
         else:
             print(f"Warning: parameter {k} not found in checkpoint")
-
-    # Load Adagrad memory
+            
     for k in model.mem:
         mem_key = f"mem_{k}"
         if mem_key in checkpoint:

@@ -1,4 +1,7 @@
-__pycache__
+__pycache__/
 env
 datasets
 training.log
+requirements.txt
+.DS_Store
+checkpoints/
