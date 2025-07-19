@@ -5,3 +5,5 @@ training.log
 requirements.txt
 .DS_Store
 checkpoints/
+analyze_xes.py
+lstm_log.xes
