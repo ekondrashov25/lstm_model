@@ -7,3 +7,4 @@ requirements.txt
 checkpoints/
 analyze_xes.py
 lstm_log.xes
+images
