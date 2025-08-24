@@ -159,6 +159,6 @@ if __name__ == "__main__":
 
     # uncomment the following lines to see different visualizations
     logging.info("different detalization levels of events")
-    # visualize_main_events_only(df_filtered)
-    # visualize_gate_events_only(df_filtered)
-    # visualize_weight_events_only(df_filtered)
+    visualize_main_events_only(df_filtered)
+    visualize_gate_events_only(df_filtered)
+    visualize_weight_events_only(df_filtered)

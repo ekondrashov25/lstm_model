@@ -41,3 +41,8 @@ During training, a custom XES logger (`XESLogger`) is used to record high-level 
 | GradientExplosion    | iteration, grad_norm, threshold, loss               | Gradient norm exceeded threshold             |
 | EarlyStopping        | iteration, reason, best_val_loss                    | Early stopping triggered                     |
 | EpochEnd             | final_loss, final_grad_norm                         | End of epoch summary                         |
+
+
+### Literature
+- Model architecture is written using the following [article](https://colah.github.io/posts/2015-08-Understanding-LSTMs/) and this [article](https://karpathy.github.io/2015/05/21/rnn-effectiveness/).
+- Some pieces of code taken from this [repo](https://github.com/karpathy/char-rnn/blob/master/model/LSTM.lua)

@@ -3,7 +3,7 @@ import argparse
 from scripts.training import train
 
 # run file 
-# python main.py train --dataset datasets/literature/shakespear.txt --hidden_size 250 --epochs 1 --sample_size 500
+# python main.py train --dataset datasets/literature/shakespear.txt --hidden_size 250 --epochs 10 --sample_size 500
 
 def main():
     parser = argparse.ArgumentParser(description="LSTM Model Project Entry Point")
