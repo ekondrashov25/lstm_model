@@ -80,6 +80,18 @@ def train(args):
         Wf_prev = model.W_f.copy()
         epoch_start_time = datetime.now()
 
+        # log epoch start event
+        log.add_event(trace, "EpochStart", attrs={
+            "epoch": epoch,
+            "total_epochs": epochs,
+            "iterations_per_epoch": iterations_per_epoch,
+            "dataset_size": len(data),
+            "vocabulary_size": len(chars),
+            "hidden_size": hidden_size,
+            "learning_rate": learning_rate,
+            "start_time": epoch_start_time.isoformat()
+        })
+
         # reset epoch statistics
         epoch_losses = []
         epoch_grad_norms = []

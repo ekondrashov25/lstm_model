@@ -1,11 +1,13 @@
 import pm4py
 import pandas as pd
 import logging
+import os
 
 logging.basicConfig(level=logging.INFO,format='%(asctime)s - %(levelname)s - %(message)s')
 
-def visualize_main_events_only(df_filtered): # visualize only the main training events
-    main_events = ['ForwardPass', 'BackwardPass', 'WeightsUpdate', 'GradientClipping', 
+def visualize_main_events_only(df_filtered):
+    """Visualize only the main training events and save as PNG"""
+    main_events = ['EpochStart', 'ForwardPass', 'BackwardPass', 'WeightsUpdate', 'GradientClipping', 
                   'GateSummary', 'Validation', 'EpochEnd']
     df_main = df_filtered[df_filtered['concept:name'].isin(main_events)]
     
@@ -22,9 +24,15 @@ def visualize_main_events_only(df_filtered): # visualize only the main training 
     logging.info(f"Start activities: {start_main}")
     logging.info(f"End activities: {end_main}")
     
+    # display right now
     pm4py.view_dfg(dfg_main, start_main, end_main)
+    # use the same approach as interactive display but save as PNG
+    gviz = pm4py.visualization.dfg.visualizer.apply(dfg_main, log_main, variant=pm4py.visualization.dfg.visualizer.Variants.FREQUENCY)
+    pm4py.visualization.dfg.visualizer.save(gviz, "pm_models/main_events_dfg.png")
+    logging.info("Saved main events DFG as 'pm_models/main_events_dfg.png'")
 
-def visualize_gate_events_only(df_filtered): # visualize only the gate-related events
+def visualize_gate_events_only(df_filtered):
+    """Visualize only the gate-related events and save as PNG"""
     gate_events = ['Gate_Forget', 'Gate_Input', 'Gate_Output', 'Gate_Candidate', 
                   'GateGradient_Forget', 'GateGradient_Input', 'GateGradient_Output', 'GateGradient_Candidate']
     df_gates = df_filtered[df_filtered['concept:name'].isin(gate_events)]
@@ -42,9 +50,15 @@ def visualize_gate_events_only(df_filtered): # visualize only the gate-related e
     logging.info(f"Start activities: {start_gates}")
     logging.info(f"End activities: {end_gates}")
     
+    # display right now
     pm4py.view_dfg(dfg_gates, start_gates, end_gates)
+    # use the same approach as interactive display but save as PNG
+    gviz = pm4py.visualization.dfg.visualizer.apply(dfg_gates, log_gates, variant=pm4py.visualization.dfg.visualizer.Variants.FREQUENCY)
+    pm4py.visualization.dfg.visualizer.save(gviz, "pm_models/gate_events_dfg.png")
+    logging.info("Saved gate events DFG as 'pm_models/gate_events_dfg.png'")
 
-def visualize_weight_events_only(df_filtered): # visualize only the weight-related events
+def visualize_weight_events_only(df_filtered):
+    """Visualize only the weight-related events and save as PNG"""
     weight_events = ['WeightGradient_W_f', 'WeightGradient_W_i', 'WeightGradient_W_c', 
                     'WeightGradient_W_o', 'WeightGradient_W_hy',
                     'WeightUpdate_W_f', 'WeightUpdate_W_i', 'WeightUpdate_W_c', 
@@ -64,7 +78,12 @@ def visualize_weight_events_only(df_filtered): # visualize only the weight-relat
     logging.info(f"Start activities: {start_weights}")
     logging.info(f"End activities: {end_weights}")
     
+    # display right now
     pm4py.view_dfg(dfg_weights, start_weights, end_weights)
+
+    gviz = pm4py.visualization.dfg.visualizer.apply(dfg_weights, log_weights, variant=pm4py.visualization.dfg.visualizer.Variants.FREQUENCY)
+    pm4py.visualization.dfg.visualizer.save(gviz, "pm_models/weight_events_dfg.png")
+    logging.info("Saved weight events DFG as 'pm_models/weight_events_dfg.png'")
 
 if __name__ == "__main__":
     log = pm4py.read_xes('lstm_log.xes')
@@ -96,7 +115,7 @@ if __name__ == "__main__":
     show_detailed = True
     
     if not show_detailed:
-        main_events = ['ForwardPass', 'BackwardPass', 'WeightsUpdate', 'GradientClipping', 
+        main_events = ['EpochStart', 'ForwardPass', 'BackwardPass', 'WeightsUpdate', 'GradientClipping', 
                       'GateSummary', 'Validation', 'EpochEnd']
         df_filtered = df_filtered[df_filtered['concept:name'].isin(main_events)]
         logging.info(f"After filtering to main events: {len(df_filtered)} events")
@@ -112,7 +131,7 @@ if __name__ == "__main__":
     
     df_filtered = df_filtered.sort_values('time:timestamp')
     
-    chunk_size = 50  # Events per trace
+    chunk_size = 50  # events per trace
     df_filtered['new_case_id'] = (df_filtered.index // chunk_size).astype(str)
     
     df_filtered['case:concept:name'] = 'trace_' + df_filtered['new_case_id']
@@ -131,12 +150,15 @@ if __name__ == "__main__":
     
     logging.info(f"Start activities: {start_activities}")
     logging.info(f"End activities: {end_activities}")
-    
+
     pm4py.view_dfg(dfg, start_activities, end_activities)
-    
-    logging.info("different detalization levels of events")
-    
+    # use the same approach as interactive display but save as PNG
+    gviz = pm4py.visualization.dfg.visualizer.apply(dfg, log_filtered, variant=pm4py.visualization.dfg.visualizer.Variants.FREQUENCY)
+    pm4py.visualization.dfg.visualizer.save(gviz, "pm_models/lstm_training_dfg.png")
+    logging.info("Saved main DFG as 'pm_models/lstm_training_dfg.png'")
+
     # uncomment the following lines to see different visualizations
+    logging.info("different detalization levels of events")
     # visualize_main_events_only(df_filtered)
     # visualize_gate_events_only(df_filtered)
     # visualize_weight_events_only(df_filtered)
