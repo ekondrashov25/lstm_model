@@ -30,6 +30,7 @@ class LSTMModel:
 
         # initialize memory for adam optimization
         self.mem = {k: np.zeros_like(v) for k, v in self.get_params().items()}
+        
 
     def get_params(self):
         return {
@@ -60,15 +61,6 @@ class LSTMModel:
             C_hat = np.tanh(self.W_c @ concat_vectors + self.b_c)
 
             is_[t], fs[t], os[t], gs[t] = i, f, o, C_hat
-
-            # # here we add info into cell state
-            # cs[t] = f * cs[t-1] + i * C_hat
-            # ys[t] = o * np.tanh(cs[t]) # the same thing as h in article
-
-            # ys[t] = self.W_hy.dot(hs[t]) + self.b_y
-            # ps[t] = np.exp(ys[t]) / np.sum(np.exp(ys[t]))
-            # # loss (negative log-likelihood)
-            # loss += -np.log(ps[t][targets[t], 0])
 
             # here we add info into cell state
             cs[t] = f * cs[t-1] + i * C_hat

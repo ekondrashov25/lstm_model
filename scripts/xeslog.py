@@ -58,6 +58,8 @@ class XESLogger:
                     ET.SubElement(event, 'float', {'key': k, 'value': str(round(v, 4))})
                 elif isinstance(v, int):
                     ET.SubElement(event, 'int', {'key': k, 'value': str(v)})
+                elif isinstance(v, bool):
+                    ET.SubElement(event, 'int', {'key': k, 'value': str(1 if v else 0)})
                 else:
                     ET.SubElement(event, 'string', {'key': k, 'value': str(v)})
     
