@@ -76,7 +76,7 @@ checkpoints/
 *.xes
 lstm_log.xes
 analysis_output/
-*.png
+# *.png
 *.jpg
 *.jpeg
 *.svg
@@ -159,3 +159,4 @@ Icon
 
 research_analysis.py
 config.py
+pm_models/
